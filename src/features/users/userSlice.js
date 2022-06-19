@@ -1,9 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = [
-    { id: 1, name: 'Bob', email: 'bob@gmail.com' },
-    { id: 2, name: 'Mahi', email: 'mahi@gmail.com' }
-]
+const initialState = [];
 
 const userSlice = createSlice({
     name: 'users',
@@ -11,9 +8,24 @@ const userSlice = createSlice({
     reducers:{
         adduser:(state, action) =>{
             state.push(action.payload)
+        },
+        editUser: (state, action) =>{
+            const {id, name, email} = action.payload;
+            const existingUser = state.find(user => user.id === id);
+            if(existingUser){
+                existingUser.name = name;
+                existingUser.email=email;
+            }
+        },
+        deleteUser: (state, action) =>{
+            const {id} = action.payload;
+            const existingUser = state.find(user => user.id === id);
+            if(existingUser){
+                return state.filter(user => user.id !==id)
+            }
         }
     }
 });
 
-export const {adduser} = userSlice.actions
+export const {adduser, editUser, deleteUser} = userSlice.actions
 export default userSlice.reducer
